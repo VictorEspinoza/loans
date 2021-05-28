@@ -22,27 +22,32 @@ export default new Vuex.Store({
       state.offer = Object.assign({}, offer);
     },
     prepareOptions(state, constraints: Constraints) {
-      const termOptions = [];
-      const amountOptions = [];
+      const calculateOptions = (
+        minimalValue: number,
+        maximalValue: number,
+        step: number
+      ) => {
+        const options: number[] = [];
+
+        for (let i = minimalValue; i <= maximalValue; i += step) {
+          options.push(i);
+        }
+
+        return options;
+      };
 
       const { amountInterval, termInterval } = constraints;
-      for (
-        let i = amountInterval.min;
-        i <= amountInterval.max;
-        i += amountInterval.step
-      ) {
-        amountOptions.push(i);
-      }
-      for (
-        let i = termInterval.min;
-        i <= termInterval.max;
-        i += termInterval.step
-      ) {
-        termOptions.push(i);
-      }
 
-      state.termOptions = termOptions;
-      state.amountOptions = amountOptions;
+      state.termOptions = calculateOptions(
+        termInterval.min,
+        termInterval.max,
+        termInterval.step
+      );
+      state.amountOptions = calculateOptions(
+        amountInterval.min,
+        amountInterval.max,
+        amountInterval.step
+      );
     },
   },
   actions: {
