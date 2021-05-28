@@ -1,20 +1,26 @@
 <template>
-  <div>something</div>
+  <div class="container">
+    <div>Bootiq</div>
+    <Sliders />
+    <OfferDetails />
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import HelloWorld from "./components/HelloWorld.vue";
+import Sliders from "@/components/Sliders.vue";
+import OfferDetails from "@/components/Offer.vue";
 
 @Component({
   components: {
-    HelloWorld,
+    Sliders,
+    OfferDetails,
   },
 })
 export default class App extends Vue {
-    created() {
-        this.$store.dispatch('loadConstraints');
-	}
+  created() {
+    this.$store.dispatch("loadConstraints");
+  }
 }
 </script>
 
