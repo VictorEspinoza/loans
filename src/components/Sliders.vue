@@ -9,7 +9,11 @@
           :min="amountConfiguration.min"
           :max="amountConfiguration.max"
         />
-        <v-select v-model="values.amount" :options="amountDisplayOptions" />
+        <v-select
+          v-model="values.amount"
+          :options="options.amountOptions"
+          :clearable="false"
+        />
       </div>
       <div>
         <h3>Term Interval</h3>
@@ -19,7 +23,11 @@
           :min="termConfiguration.min"
           :max="termConfiguration.max"
         />
-        <v-select v-model="values.term" :options="termDisplayOptions" />
+        <v-select
+          v-model="values.term"
+          :options="options.termOptions"
+          :clearable="false"
+        />
       </div>
     </div>
   </div>
@@ -53,9 +61,6 @@ export default class Sliders extends Vue {
     amountOptions: number[];
     termOptions: number[];
   };
-
-  amountDisplayOptions: number[] = [];
-  termDisplayOptions: number[] = [];
 
   values = {
     amount: 0,
@@ -102,12 +107,6 @@ export default class Sliders extends Vue {
   valuesChanged = _debounce((newValues: { amount: number; term: number }) => {
     this.$store.dispatch("loadOffer", newValues);
   }, 500);
-
-  @Watch("options")
-  optionsChanged(newValue: { termOptions: number[]; amountOptions: number[] }) {
-    this.termDisplayOptions = newValue.termOptions;
-    this.amountDisplayOptions = newValue.amountOptions;
-  }
 }
 </script>
 

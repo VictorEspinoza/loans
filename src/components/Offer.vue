@@ -1,7 +1,11 @@
 <template>
   <div>
-    <div class="my_container">
-      <code>{{ JSON.stringify(this.offer) }}</code>
+    <div v-if="this.offer" class="my_container">
+      <div>Monthly payment: {{ this.offer.monthlyPayment }}</div>
+      <div>Term: {{ this.offer.term }}</div>
+      <div>Total cost of credit: {{ this.offer.totalCostOfCredit }}</div>
+      <div>Total principal: {{ this.offer.totalPrincipal }}</div>
+      <div>Total repayable amount: {{ this.offer.totalRepayableAmount }}</div>
     </div>
   </div>
 </template>
