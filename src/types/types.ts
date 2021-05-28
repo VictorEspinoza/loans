@@ -23,4 +23,5 @@ export interface State {
   offer: Offer | null;
   amountOptions: number[];
   termOptions: number[];
+  pastOffers: { [key: string]: Offer };
 }

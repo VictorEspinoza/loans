@@ -13,6 +13,7 @@ export default new Vuex.Store({
     offer: null,
     amountOptions: [],
     termOptions: [],
+    pastOffers: {},
   } as State,
   mutations: {
     saveConstraints(state, constraints: Constraints) {
@@ -20,6 +21,17 @@ export default new Vuex.Store({
     },
     saveCurrentOffer(state, offer: Offer) {
       state.offer = Object.assign({}, offer);
+    },
+    saveHistoryOffer(
+      state,
+      {
+        params,
+        offer,
+      }: { params: { amount: number; term: number }; offer: Offer }
+    ) {
+      const { amount, term } = params;
+      const key = `${amount}-${term}`;
+      state.pastOffers[key] = Object.assign({}, offer);
     },
     prepareOptions(state, constraints: Constraints) {
       const calculateOptions = (
@@ -58,11 +70,22 @@ export default new Vuex.Store({
       commit("saveConstraints", data);
       commit("prepareOptions", data);
     },
-    async loadOffer({ commit }, payload: { amount: number; term: number }) {
-      const result: ApiResult = await LoanService.realFirstLoanOffer(payload);
-      const { data }: { data: Constraints } = result;
+    async loadOffer(
+      { commit, state },
+      payload: { amount: number; term: number }
+    ) {
+      //checking history offers
+      const { amount, term } = payload;
+      const key = `${amount}-${term}`;
+      if (state.pastOffers[key]) {
+        commit("saveCurrentOffer", state.pastOffers[key]);
+      } else {
+        const result: ApiResult = await LoanService.realFirstLoanOffer(payload);
+        const { data }: { data: Constraints } = result;
 
-      commit("saveCurrentOffer", data);
+        commit("saveCurrentOffer", data);
+        commit("saveHistoryOffer", { params: payload, offer: data });
+      }
     },
   },
   getters: {
